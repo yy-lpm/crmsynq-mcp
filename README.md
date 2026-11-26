@@ -1,5 +1,7 @@
 # CRMSynQ MCP server
 
+[![CRMSynQ MCP connector](https://glama.ai/mcp/connectors/com.crmsynq/crmsynq/badges/score.svg)](https://glama.ai/mcp/connectors/com.crmsynq/crmsynq)
+
 Connect your AI agent to [CRMSynQ](https://crmsynq.com) and let it set up and run LinkedIn-based contact updates in HubSpot, Pipedrive, Zoho CRM, Zoho Bigin and Zoho Recruit.
 
 ```
