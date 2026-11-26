@@ -42,7 +42,7 @@ CRMSynQ reads public LinkedIn profile data. It doesn't need Sales Navigator and 
 | Authorization server metadata | `https://app.crmsynq.com/.well-known/oauth-authorization-server` |
 | REST API (same features, same sign-in) | `https://app.crmsynq.com/api/v1`, OpenAPI spec at [`/api/v1/openapi.json`](https://app.crmsynq.com/api/v1/openapi.json) |
 
-A request without a token gets `401` with a `WWW-Authenticate` header pointing to the protected resource metadata, so clients that support MCP authorization start the sign-in on their own.
+Anyone can list the tools (`tools/list`) without signing in. Every other request without a token, including `initialize` and every tool call, gets `401` with a `WWW-Authenticate` header pointing to the protected resource metadata, so clients that support MCP authorization start the sign-in on their own.
 
 ## Connect your client
 
