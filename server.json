@@ -3,8 +3,12 @@
   "name": "com.crmsynq/crmsynq",
   "title": "CRMSynQ",
   "description": "Keep HubSpot, Pipedrive, Zoho CRM, Bigin and Recruit contacts up to date from LinkedIn profiles.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "websiteUrl": "https://crmsynq.com/ai-agents",
+  "repository": {
+    "url": "https://github.com/yy-lpm/crmsynq-mcp",
+    "source": "github"
+  },
   "icons": [
     {
       "src": "https://app.crmsynq.com/icon-512.png",
