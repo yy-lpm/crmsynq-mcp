@@ -55,7 +55,7 @@ Client menus change often. The steps below follow each vendor's documentation as
 1. Open **Customize > Connectors**.
 2. Click **+ Add**, then **Add custom connector**.
 3. Name it `CRMSynQ`, paste `https://app.crmsynq.com/api/mcp` and click **Continue**.
-4. Review the detected authentication settings, choose **Sign in now** and click **Add**. Sign in to CRMSynQ when the page opens.
+4. Review the detected authentication settings, choose **Sign in now** and click **Add**. If Claude asks you to choose an **OAuth client**, choose **Register automatically**. Sign in to CRMSynQ when the page opens.
 
 CRMSynQ registers the client automatically, so you don't need a client ID, client secret or request headers. On Team and Enterprise plans, an owner adds the connector under **Organization settings > Connectors** first, and members then connect it from **Customize > Connectors**. See Anthropic's [custom connectors article](https://support.claude.com/en/articles/11175166-getting-started-with-custom-connectors-using-remote-mcp) for which plans include custom connectors.
 
@@ -109,7 +109,7 @@ In ChatGPT on the web, add CRMSynQ as a custom MCP server:
 3. Choose **OAuth** for authentication, select **I understand and want to continue**, then **Create as a plugin**.
 4. Sign in to CRMSynQ when ChatGPT asks, and install the plugin before using it in a chat.
 
-Which plans can add custom MCP servers, and which can use tools that make changes, depends on your ChatGPT plan and workspace settings. See OpenAI's [help article](https://help.openai.com/en/articles/12584461-developer-mode-apps-and-full-mcp-client-support-in-chatgpt).
+You don't need to turn on developer mode first. According to OpenAI, full MCP support, including tools that make changes, is available on ChatGPT Business and Enterprise/Edu on the web; on Business, only admins and owners can add a custom MCP server. Pro can connect custom servers for read actions only, so it can answer questions but not create or run schedules. See OpenAI's [help article](https://help.openai.com/en/articles/12584461-developer-mode-apps-and-full-mcp-client-support-in-chatgpt).
 
 ### Other clients
 
@@ -117,13 +117,13 @@ Any client that supports remote MCP servers over Streamable HTTP with OAuth can 
 
 ## Sign in and approve access
 
-1. Your client opens the CRMSynQ sign-in page. Sign in with your CRM (HubSpot, Pipedrive, Zoho CRM, Zoho Bigin or Zoho Recruit) or with an email address. You don't need a CRMSynQ account first; signing in creates one with 50 free credits.
-2. A consent screen shows the app's name, the address you'll be returned to, and the access it asks for: **read**, or **read and write**. Choose **Allow** or **Deny**.
+1. Your client opens the CRMSynQ sign-in page. Sign in with your CRM (HubSpot, Pipedrive, Zoho CRM, Zoho Bigin or Zoho Recruit), an email address or Google. You don't need a CRMSynQ account first; signing in creates one with 50 free credits.
+2. A consent screen shows the app's name, the address you'll be returned to, and the access it asks for: **read**, or **read and write**. Choose **Allow** or **Deny**; you don't pick an access level on this screen. A client that asks for no specific scope gets read and write.
 3. You're back in your client, connected.
 
 If you signed in with an email address and haven't connected a CRM yet, the account, credit and LinkedIn profile tools work, and CRM tools return `NO_CRM_CONNECTED`. Connect your CRM in the [CRMSynQ app](https://app.crmsynq.com) and ask again.
 
-To disconnect an agent, open **AI agents** in the CRMSynQ app and choose **Disconnect** next to it. Its tokens are deleted immediately.
+To disconnect an agent, open **Claude & ChatGPT** in the CRMSynQ app and choose **Disconnect** next to it. Its tokens are deleted immediately.
 
 ## Tools
 
@@ -133,7 +133,7 @@ To disconnect an agent, open **AI agents** in the CRMSynQ app and choose **Disco
 
 | Tool | What it does |
 |---|---|
-| `get_setup_status` | Connected CRM, credit balance, setup progress per contact type, schedules, the main sync's status and the recommended next step. |
+| `get_setup_status` | Connected CRM, credit balance, what the CRM is used for (sales or recruiting), setup progress per contact type, schedules, the main sync's status, how many contacts have changes waiting for review, and the recommended next step. |
 | `list_contact_types` | Contact types (for example Contacts, Leads, Candidates) with their layouts, LinkedIn URL field and current field mappings. |
 | `list_crm_fields` | All CRM fields for a contact type: id, label, type, whether it can be updated or searched, and what it's mapped from. |
 | `list_linkedin_fields` | LinkedIn data points that can be mapped into CRM fields. |
@@ -141,7 +141,7 @@ To disconnect an agent, open **AI agents** in the CRMSynQ app and choose **Disco
 | `count_contacts` | How many contacts an audience matches, to estimate credits before creating a schedule. |
 | `list_schedules` | All schedules with status, interval, matching contacts, progress and what the last update did. |
 | `get_schedule` | One schedule with live progress and its last update's results. |
-| `list_activity` | Recent contact updates with before and after values for each changed field, plus the mapped fields left alone and why. |
+| `list_activity` | Recent contact updates, newest first, with before and after values for each changed field, plus the mapped fields left alone and why. Filter by schedule and by status (updated, in progress, failed, to review, dismissed). Paged. |
 | `list_pending_changes` | Changes waiting for review from schedules in review mode: before and after per field, the company link, photo and profile PDF, and values kept as they were. |
 | `get_lookup_results` | Results of a LinkedIn profile lookup: status per URL and, once checked, the current title, company, location and headline. |
 | `get_list_status` | Progress of a list refresh: status, rows, profiles checked and not found, and credits used. |
@@ -152,7 +152,7 @@ To disconnect an agent, open **AI agents** in the CRMSynQ app and choose **Disco
 | Tool | What it does |
 |---|---|
 | `set_linkedin_url_field` | Choose the CRM field that stores each contact's LinkedIn URL. |
-| `apply_recommended_mapping` | Map LinkedIn job title, company, location, industry and skills onto matching CRM fields. Never overwrites existing mappings and never maps names, emails or phones. |
+| `apply_recommended_mapping` | Map LinkedIn data onto CRM fields named for it, by use case. Sales: job title, company, location. Recruiting: open to work, job title, current employer, skills, location, years of experience. Never overwrites existing mappings, never creates fields and never maps names, emails or phones. |
 | `set_field_mapping` | Set which LinkedIn data fills a CRM field, or stop updating it, optionally only while the field is empty. Applies to schedules created afterwards. |
 | `set_enrichment_options` | Turn company linking, company creation, adding or replacing photos, the profile PDF and "keep your team's edits" on or off for new schedules. |
 | `create_schedule` | Start updating an audience: a small first batch within a minute, then the rest, then a refresh every 1 to 180 days. Uses 1 credit per contact checked. Takes `applyMode`: `auto` or `review`. |
