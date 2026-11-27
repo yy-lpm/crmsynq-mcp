@@ -38,7 +38,7 @@ CRMSynQ reads public LinkedIn profile data. It doesn't need Sales Navigator and 
 |---|---|
 | Endpoint | `https://app.crmsynq.com/api/mcp` |
 | Transport | Streamable HTTP (stateless, POST) |
-| Authentication | OAuth 2.1, authorization code with PKCE (S256), dynamic client registration, refresh tokens. You sign in with your CRM or with an email address. No API keys. |
+| Authentication | OAuth 2.1, authorization code with PKCE (S256), dynamic client registration, refresh tokens. You sign in with your CRM, an email address or Google. No API keys. |
 | Scopes | `read`: see setup, schedules and activity. `write`: also change setup, run schedules and lookups (uses credits), apply or revert changes. `write` includes `read`. |
 | Protected resource metadata | `https://app.crmsynq.com/.well-known/oauth-protected-resource` |
 | Authorization server metadata | `https://app.crmsynq.com/.well-known/oauth-authorization-server` |
@@ -127,9 +127,9 @@ To disconnect an agent, open **Claude & ChatGPT** in the CRMSynQ app and choose 
 
 ## Tools
 
-29 tools. The 13 read tools are available with the `read` scope. The 16 write tools are only offered to tokens with the `write` scope. Tools that write to your CRM, spend credits or delete something are annotated as destructive, so clients that respect MCP annotations ask you before calling them.
+31 tools. The 15 read tools are available with the `read` scope. The 16 write tools are only offered to tokens with the `write` scope. Tools that write to your CRM, spend credits or delete something are annotated as destructive, so clients that respect MCP annotations ask you before calling them.
 
-### Read tools (13)
+### Read tools (15)
 
 | Tool | What it does |
 |---|---|
@@ -144,8 +144,10 @@ To disconnect an agent, open **Claude & ChatGPT** in the CRMSynQ app and choose 
 | `list_activity` | Recent contact updates, newest first, with before and after values for each changed field, plus the mapped fields left alone and why. Filter by schedule and by status (updated, in progress, failed, to review, dismissed). Paged. |
 | `list_pending_changes` | Changes waiting for review from schedules in review mode: before and after per field, the company link, photo and profile PDF, and values kept as they were. |
 | `get_lookup_results` | Results of a LinkedIn profile lookup: status per URL and, once checked, the current title, company, location and headline. |
-| `get_list_status` | Progress of a list refresh: status, rows, profiles checked and not found, and credits used. |
+| `list_lookups` | Your recent LinkedIn profile lookups, newest first, including ones started in the app: lookup ID, when it was started, number of URLs and profiles, and the first URL. Up to 50 (10 by default). |
+| `get_list_status` | Progress of a list refresh: status (draft, running, waiting for credits, done, cancelled), rows, profiles checked, not found, waiting for credits, and credits used. |
 | `get_list_results` | Rows of a list refresh with the current title, company, location, headline, whether it changed, check date and status. Paged. |
+| `list_list_refreshes` | Your list refreshes, newest first, including CSV and Excel files uploaded in the app: list ID, file name, status, rows, progress, changed rows, and when the file and results are deleted. Up to 50; drafts are left out. |
 
 ### Write tools (16)
 
@@ -180,6 +182,7 @@ To disconnect an agent, open **Claude & ChatGPT** in the CRMSynQ app and choose 
 - "Undo the last change CRMSynQ made to Jane Cooper's job title."
 - "Look up these three LinkedIn profiles and tell me where each person works now: ..."
 - "Here's a CSV of event attendees. Check where each of them works now, but tell me the credit cost first."
+- "Show my last list refresh and who has a new job title or company."
 
 The server's instructions tell agents to confirm with you before creating schedules that will spend many credits, and before applying, dismissing, reverting or deleting.
 
